@@ -3,7 +3,20 @@
 	import { areOverlapping } from './checkOverlap';
 
 	function checkAnswerEvent() {
-		const isCorrect = checkAnswer();
+		const overlappingCards = $cards.filter((moveable) => {
+			return areOverlapping(moveable?.element, $currentQuestion.target);
+		});
+
+		let isCorrect = false;
+		if (overlappingCards.length === 1) {
+			const submittedCard = overlappingCards[0];
+			submittedCard.isSubmitted = true;
+			isCorrect = $currentQuestion.correctAnswers.includes(submittedCard.id);
+			submittedCard.isCorrect = isCorrect;
+			$cards = $cards; //tell svelte to react, since we're not editing cards directly
+			$score = isCorrect ? $score + 1 : 0;
+		}
+
 		//     if (isCorrect) {
 		//     document.getElementById('newQuestion').disabled = false;
 		//     event.currentTarget.disabled = true;
@@ -21,23 +34,6 @@
 		//     }
 		//     updateScoreText();
 		//     }
-	}
-
-	function checkAnswer() {
-		const overlappingCards = $cards.filter((card) => {
-			return areOverlapping(card?.element, $currentQuestion.target);
-		});
-
-		if (overlappingCards.length === 1) {
-			const submittedCard = overlappingCards[0];
-			submittedCard.isSubmitted = true;
-			const isCorrect = $currentQuestion.correctAnswers.includes(submittedCard.label!);
-			submittedCard.isCorrect = isCorrect;
-			$score = isCorrect ? $score + 1 : 0;
-			return isCorrect;
-		} else {
-			return false;
-		}
 	}
 </script>
 

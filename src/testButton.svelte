@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { cards } from './stores';
-	import type Card from './card.svelte';
+	import { cards, type IMoveable } from './stores';
 
 	function testEvent() {
 		// groupElements(
@@ -9,11 +8,17 @@
 		// 	})
 		// );
 
-		toggleMoveable();
+		// toggleMoveable();
+
+		changeALabel();
+	}
+
+	function changeALabel() {
+		$cards[0].id = 'yellow';
 	}
 
 	function toggleMoveable() {
-		($cards as Card[]).forEach((card) => {
+		$cards.forEach((card) => {
 			card.isMoveable = !card.isMoveable;
 		});
 	}

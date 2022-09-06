@@ -1,12 +1,27 @@
 import { writable } from 'svelte/store';
-import type Card from './card.svelte';
 
 export const score = writable(0);
-export const cards = writable<Card[]>([]);
 
-export type Question = {
+export interface IAnswer {
+	id: string;
+	isSubmitted: boolean;
+	isCorrect: boolean;
+}
+
+export interface IMoveable {
+	isMoveable: boolean;
+}
+
+export interface ICard extends IAnswer, IMoveable {
+	id: string;
+	element?: HTMLDivElement;
+	audioElement?: HTMLAudioElement;
+}
+
+export const cards = writable<ICard[]>([]);
+
+export interface IQuestion {
 	target?: HTMLElement;
 	correctAnswers: string[];
-};
-
-export const currentQuestion = writable<Question>({ correctAnswers: [] });
+}
+export const currentQuestion = writable<IQuestion>({ correctAnswers: [] });
