@@ -12,16 +12,32 @@ export interface IMoveable {
 	isMoveable: boolean;
 }
 
-export interface ICard extends IAnswer, IMoveable {
+export interface IAudioPlayer {
+	audioElement?: HTMLAudioElement;
+}
+
+export interface ICard extends IAnswer, IMoveable, IAudioPlayer {
 	id: string;
 	element?: HTMLDivElement;
-	audioElement?: HTMLAudioElement;
 }
 
 export const cards = writable<ICard[]>([]);
 
 export interface IQuestion {
-	target?: HTMLElement;
 	correctAnswers: string[];
+	numAttemptsTaken: number;
 }
-export const currentQuestion = writable<IQuestion>({ correctAnswers: [] });
+
+export interface IZone extends IQuestion, IAudioPlayer {
+	zoneElement?: HTMLElement;
+}
+
+// export const currentQuestion = writable<IQuestion>({ correctAnswers: [], numAttemptsTaken: 0 });
+export const questionZone = writable<IZone>({ correctAnswers: [], numAttemptsTaken: 0 });
+
+export enum State {
+	Intro,
+	Asking,
+	Review
+}
+export const state = writable<State>();

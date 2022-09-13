@@ -1,7 +1,7 @@
 <script type="ts">
 	import NewQuestionButton from '../newQuestionButton.svelte';
 
-	import { cards, currentQuestion, score, type ICard } from '../stores';
+	import { cards, questionZone, score, type ICard } from '../stores';
 	import CheckAnswerButton from '../checkAnswerButton.svelte';
 	import TestButton from '../testButton.svelte';
 	import { draggable } from '@neodrag/svelte';
@@ -43,16 +43,42 @@
          <input type="checkbox" id="answerLabelCheckbox" checked='false'>
       </form>
    </div> -->
-<div id="score">{$score}</div>
+<div id="score">{$score}/{$cards.length}</div>
 <CheckAnswerButton />
-<TestButton />
-<div class="zone" bind:this={$currentQuestion.target} />
+<!-- <TestButton /> -->
+<div
+	class="zone question"
+	bind:this={$questionZone.zoneElement}
+	on:mousedown={() => $questionZone.audioElement?.play()}
+>
+	{#each $questionZone.correctAnswers as answer}
+		<img
+			class="cardImg"
+			src="https://www.adrobiso.com/media/img/{answer}.svg"
+			alt={answer}
+			draggable="false"
+		/>
+		<p>{answer}</p>
+		<audio
+			bind:this={$questionZone.audioElement}
+			src="https://www.adrobiso.com/media/audio/{answer}.mp3"
+		>
+			<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
+			Your browser does not support the audio element.
+		</audio>
+		<img
+			class="audioIndicator"
+			src="https://www.adrobiso.com/media/img/speaker.png"
+			alt="play audio"
+		/>
+	{/each}
+</div>
 {#each $cards as moveable}
 	<div
 		bind:this={moveable.element}
 		on:mousedown={() => moveable.audioElement?.play()}
 		use:draggable={{ disabled: !moveable.isMoveable }}
-		class="card"
+		class="card question"
 		class:moveable={moveable.isMoveable}
 		class:correct={moveable.isSubmitted && moveable.isCorrect}
 		class:incorrect={moveable.isSubmitted && !moveable.isCorrect}
@@ -86,10 +112,10 @@
 	}
 
 	#score {
-		/* position: absolute;
+		position: absolute;
 		top: 10px;
 		left: 50%;
-		transform: translate(-50%, 0); */
+		transform: translate(-50%, 0);
 		color: white;
 		font-size: x-large;
 	}
@@ -102,7 +128,7 @@
 		touch-action: none;
 	}
 
-	.card .cardImg {
+	.question .cardImg {
 		object-fit: contain;
 		max-width: 100px;
 		max-height: 100px;
@@ -111,7 +137,7 @@
 		display: block;
 	}
 
-	.card p {
+	.question p {
 		font-size: larger;
 		margin-top: 6px;
 		margin-bottom: 0;
@@ -119,7 +145,7 @@
 		color: black;
 	}
 
-	.card .audioIndicator {
+	.question .audioIndicator {
 		width: 20px;
 	}
 
@@ -138,9 +164,12 @@
 	}
 
 	.zone {
+		/* position: relative; */
+		margin: auto;
 		height: 150px;
 		width: 150px;
 		outline: 3px dashed whitesmoke;
 		z-index: 0;
+		/* visibility: hidden; */
 	}
 </style>

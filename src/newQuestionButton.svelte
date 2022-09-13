@@ -1,15 +1,40 @@
 <script lang="ts">
-	import { cards, currentQuestion } from './stores';
+	import { cards, questionZone, State, state } from './stores';
 
 	// TODO for now just updates current question, but we want to create a new question
 	function nextQuestionEvent() {
 		const newAnswer = $cards[Math.floor(Math.random() * $cards.length)];
-		$currentQuestion.correctAnswers = [newAnswer.id];
+		$questionZone.correctAnswers = [newAnswer.id];
+		$questionZone.numAttemptsTaken = 0;
 		newAnswer.audioElement?.play(); // TODO don't manually type this. make a Map and look it up?
 		$cards.forEach((card) => (card.isSubmitted = false));
+		$cards = $cards; //tell svelte to react, since we're not editing cards directly
+		$state = State.Asking;
 	}
 </script>
 
-<button id="newQuestion" on:click={nextQuestionEvent}>
+<button id="newQuestion" on:click={nextQuestionEvent} disabled={$state === State.Asking}>
 	<img src="./media/img/next.png" alt="New Question" />
 </button>
+
+<style>
+	#newQuestion {
+		position: absolute;
+		background-color: lightgreen;
+		border-color: rgb(178, 236, 178);
+		border-radius: 6px;
+		right: 10px;
+		top: 10px;
+	}
+
+	#newQuestion > img {
+		width: 80px;
+		height: auto;
+	}
+
+	#newQuestion:disabled {
+		background-color: revert;
+		border-color: revert;
+		opacity: 0.5;
+	}
+</style>
