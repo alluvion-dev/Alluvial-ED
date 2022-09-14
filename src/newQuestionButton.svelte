@@ -6,7 +6,7 @@
 		const newAnswer = $cards[Math.floor(Math.random() * $cards.length)];
 		$questionZone.correctAnswers = [newAnswer.id];
 		$questionZone.numAttemptsTaken = 0;
-		newAnswer.audioElement?.play(); // TODO don't manually type this. make a Map and look it up?
+		$questionZone.audioElement?.play(); // TODO wait for new audio to load
 		$cards.forEach((card) => (card.isSubmitted = false));
 		$cards = $cards; //tell svelte to react, since we're not editing cards directly
 		$state = State.Asking;

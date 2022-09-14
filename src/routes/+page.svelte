@@ -16,33 +16,69 @@
 		};
 		$cards.push(card);
 	});
+
+	let settings = {
+		showOptions: false,
+		questionOptions: { showImage: false, showLabel: false, playAudio: true },
+		answerOptions: { showImage: true, showLabel: false, playAudio: false }
+	};
 </script>
 
 <NewQuestionButton />
-<!-- <button id="showOptions" type="button">⚙️</button>
-   <div id="forms">
-      <form id="questionForm">
-         <p>❓</p>
-         <hr>
-         <label for="questionAudioCheckbox">🔈</label>
-         <input type="checkbox" id="questionAudioCheckbox">
-         <label for="questionImageCheckbox">🖼️</label>
-         <input type="checkbox" id="questionImageCheckbox">
-         <label for="questionLabelCheckbox">🔤</label>
-         <input type="checkbox" id="questionLabelCheckbox">
-      </form>
-      <br>
-      <form id="answerForm">
-         <p>🙋</p>
-         <hr>
-         <label for="answerAudioCheckbox">🔈</label>
-         <input type="checkbox" id="answerAudioCheckbox" checked='false'>
-         <label for="answerImageCheckbox">🖼️</label>
-         <input type="checkbox" id="answerImageCheckbox" checked='true'>
-         <label for="answerLabelCheckbox">🔤</label>
-         <input type="checkbox" id="answerLabelCheckbox" checked='false'>
-      </form>
-   </div> -->
+<button
+	id="showOptions"
+	type="button"
+	on:click={() => (settings.showOptions = !settings.showOptions)}>⚙️</button
+>
+{#if settings.showOptions}
+	<div id="forms">
+		<form id="questionForm">
+			<p>❓</p>
+			<hr />
+			<label for="questionAudioCheckbox">🔈</label>
+			<input
+				type="checkbox"
+				id="questionAudioCheckbox"
+				bind:checked={settings.questionOptions.playAudio}
+			/>
+			<label for="questionImageCheckbox">🖼️</label>
+			<input
+				type="checkbox"
+				id="questionImageCheckbox"
+				bind:checked={settings.questionOptions.showImage}
+			/>
+			<label for="questionLabelCheckbox">🔤</label>
+			<input
+				type="checkbox"
+				id="questionLabelCheckbox"
+				bind:checked={settings.questionOptions.showLabel}
+			/>
+		</form>
+		<br />
+		<form id="answerForm">
+			<p>🙋</p>
+			<hr />
+			<label for="answerAudioCheckbox">🔈</label>
+			<input
+				type="checkbox"
+				id="answerAudioCheckbox"
+				bind:checked={settings.answerOptions.playAudio}
+			/>
+			<label for="answerImageCheckbox">🖼️</label>
+			<input
+				type="checkbox"
+				id="answerImageCheckbox"
+				bind:checked={settings.answerOptions.showImage}
+			/>
+			<label for="answerLabelCheckbox">🔤</label>
+			<input
+				type="checkbox"
+				id="answerLabelCheckbox"
+				bind:checked={settings.answerOptions.showLabel}
+			/>
+		</form>
+	</div>
+{/if}
 <div id="score">{$score}/{$cards.length}</div>
 <CheckAnswerButton />
 <!-- <TestButton /> -->
@@ -52,25 +88,31 @@
 	on:mousedown={() => $questionZone.audioElement?.play()}
 >
 	{#each $questionZone.correctAnswers as answer}
-		<img
-			class="cardImg"
-			src="https://www.adrobiso.com/media/img/{answer}.svg"
-			alt={answer}
-			draggable="false"
-		/>
-		<p>{answer}</p>
-		<audio
-			bind:this={$questionZone.audioElement}
-			src="https://www.adrobiso.com/media/audio/{answer}.mp3"
-		>
-			<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
-			Your browser does not support the audio element.
-		</audio>
-		<img
-			class="audioIndicator"
-			src="https://www.adrobiso.com/media/img/speaker.png"
-			alt="play audio"
-		/>
+		{#if settings.questionOptions.showImage}
+			<img
+				class="cardImg"
+				src="https://www.adrobiso.com/media/img/{answer}.svg"
+				alt={answer}
+				draggable="false"
+			/>
+		{/if}
+		{#if settings.questionOptions.showLabel}
+			<p>{answer}</p>
+		{/if}
+		{#if settings.questionOptions.playAudio}
+			<audio
+				bind:this={$questionZone.audioElement}
+				src="https://www.adrobiso.com/media/audio/{answer}.mp3"
+			>
+				<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
+				Your browser does not support the audio element.
+			</audio>
+			<img
+				class="audioIndicator"
+				src="https://www.adrobiso.com/media/img/speaker.png"
+				alt="play audio"
+			/>
+		{/if}
 	{/each}
 </div>
 {#each $cards as moveable}
@@ -83,25 +125,31 @@
 		class:correct={moveable.isSubmitted && moveable.isCorrect}
 		class:incorrect={moveable.isSubmitted && !moveable.isCorrect}
 	>
-		<img
-			class="cardImg"
-			src="https://www.adrobiso.com/media/img/{moveable.id}.svg"
-			alt={moveable.id}
-			draggable="false"
-		/>
-		<p>{moveable.id}</p>
-		<audio
-			bind:this={moveable.audioElement}
-			src="https://www.adrobiso.com/media/audio/{moveable.id}.mp3"
-		>
-			<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
-			Your browser does not support the audio element.
-		</audio>
-		<img
-			class="audioIndicator"
-			src="https://www.adrobiso.com/media/img/speaker.png"
-			alt="play audio"
-		/>
+		{#if settings.answerOptions.showImage}
+			<img
+				class="cardImg"
+				src="https://www.adrobiso.com/media/img/{moveable.id}.svg"
+				alt={moveable.id}
+				draggable="false"
+			/>
+		{/if}
+		{#if settings.answerOptions.showLabel}
+			<p>{moveable.id}</p>
+		{/if}
+		{#if settings.answerOptions.playAudio}
+			<audio
+				bind:this={moveable.audioElement}
+				src="https://www.adrobiso.com/media/audio/{moveable.id}.mp3"
+			>
+				<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
+				Your browser does not support the audio element.
+			</audio>
+			<img
+				class="audioIndicator"
+				src="https://www.adrobiso.com/media/img/speaker.png"
+				alt="play audio"
+			/>
+		{/if}
 	</div>
 {/each}
 
@@ -171,5 +219,36 @@
 		outline: 3px dashed whitesmoke;
 		z-index: 0;
 		/* visibility: hidden; */
+	}
+
+	#showOptions {
+		position: absolute;
+		bottom: 10px;
+		right: 10px;
+		width: 50px;
+		height: 50px;
+	}
+
+	#forms {
+		position: absolute;
+		bottom: 10px;
+		right: 70px;
+		text-align: center;
+		z-index: 2;
+	}
+
+	#forms > form {
+		background-color: rgba(220, 220, 220, 0.9);
+	}
+
+	#forms > form > input {
+		width: 30px;
+		height: 30px;
+		margin-right: 20px;
+	}
+
+	#forms > form > label {
+		font-size: 30px;
+		margin-left: 20px;
 	}
 </style>
