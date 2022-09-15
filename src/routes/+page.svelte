@@ -89,29 +89,17 @@
 >
 	{#each $questionZone.correctAnswers as answer}
 		{#if settings.questionOptions.showImage}
-			<img
-				class="cardImg"
-				src="https://www.adrobiso.com/media/img/{answer}.svg"
-				alt={answer}
-				draggable="false"
-			/>
+			<img class="cardImg" src="static/media/img/{answer}.svg" alt={answer} draggable="false" />
 		{/if}
 		{#if settings.questionOptions.showLabel}
 			<p>{answer}</p>
 		{/if}
 		{#if settings.questionOptions.playAudio}
-			<audio
-				bind:this={$questionZone.audioElement}
-				src="https://www.adrobiso.com/media/audio/{answer}.mp3"
-			>
-				<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
+			<audio bind:this={$questionZone.audioElement} src="/media/audio/{answer}.mp3">
+				<!-- <source src="/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
 				Your browser does not support the audio element.
 			</audio>
-			<img
-				class="audioIndicator"
-				src="https://www.adrobiso.com/media/img/speaker.png"
-				alt="play audio"
-			/>
+			<img class="audioIndicator" src="/media/img/speaker.png" alt="play audio" />
 		{/if}
 	{/each}
 </div>
@@ -126,29 +114,17 @@
 		class:incorrect={moveable.isSubmitted && !moveable.isCorrect}
 	>
 		{#if settings.answerOptions.showImage}
-			<img
-				class="cardImg"
-				src="https://www.adrobiso.com/media/img/{moveable.id}.svg"
-				alt={moveable.id}
-				draggable="false"
-			/>
+			<img class="cardImg" src="/media/img/{moveable.id}.svg" alt={moveable.id} draggable="false" />
 		{/if}
 		{#if settings.answerOptions.showLabel}
 			<p>{moveable.id}</p>
 		{/if}
 		{#if settings.answerOptions.playAudio}
-			<audio
-				bind:this={moveable.audioElement}
-				src="https://www.adrobiso.com/media/audio/{moveable.id}.mp3"
-			>
-				<!-- <source src="https://www.adrobiso.com/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
+			<audio bind:this={moveable.audioElement} src="/media/audio/{moveable.id}.mp3">
+				<!-- <source src="/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
 				Your browser does not support the audio element.
 			</audio>
-			<img
-				class="audioIndicator"
-				src="https://www.adrobiso.com/media/img/speaker.png"
-				alt="play audio"
-			/>
+			<img class="audioIndicator" src="/media/img/speaker.png" alt="play audio" />
 		{/if}
 	</div>
 {/each}

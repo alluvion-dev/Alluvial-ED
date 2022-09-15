@@ -1,14 +1,17 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { cards, questionZone, State, state } from './stores';
 
 	// TODO for now just updates current question, but we want to create a new question
-	function nextQuestionEvent() {
+	async function nextQuestionEvent() {
 		const newAnswer = $cards[Math.floor(Math.random() * $cards.length)];
 		$questionZone.correctAnswers = [newAnswer.id];
 		$questionZone.numAttemptsTaken = 0;
+		await tick();
+		$questionZone.audioElement?.load();
 		$questionZone.audioElement?.play(); // TODO wait for new audio to load
 		$cards.forEach((card) => (card.isSubmitted = false));
-		$cards = $cards; //tell svelte to react, since we're not editing cards directly
+		$cards = $cards; //tell svelte to react, since we're not editing $cards directly
 		$state = State.Asking;
 	}
 </script>
