@@ -133,6 +133,7 @@
 	:global(body) {
 		font-family: sans-serif;
 		background: #2e3440;
+		background-image: url('/media/img/darkwood.jpg');
 	}
 
 	#score {
