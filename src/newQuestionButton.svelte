@@ -4,9 +4,9 @@
 
 	// TODO for now just updates current question, but we want to create a new question
 	async function nextQuestionEvent() {
-		const newAnswer = $cards[Math.floor(Math.random() * $cards.length)];
-		$questionZone.correctAnswers = [newAnswer.id];
-		$questionZone.numAttemptsTaken = 0;
+		$questionZone.currentQuestion =
+			$questionZone.questions[Math.floor(Math.random() * $questionZone.questions.length)];
+		$questionZone.currentQuestion.numAttemptsTaken = 0;
 		await tick();
 		$questionZone.audioElement?.load();
 		$questionZone.audioElement?.play(); // TODO wait for new audio to load

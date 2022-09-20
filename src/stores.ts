@@ -28,12 +28,15 @@ export interface IQuestion {
 	numAttemptsTaken: number;
 }
 
-export interface IZone extends IQuestion, IAudioPlayer {
+export interface IZone extends IAudioPlayer {
 	zoneElement?: HTMLElement;
+	questions: IQuestion[];
+	currentQuestion?: IQuestion;
+	correctlyAnsweredQuestions: IQuestion[];
 }
 
 // export const currentQuestion = writable<IQuestion>({ correctAnswers: [], numAttemptsTaken: 0 });
-export const questionZone = writable<IZone>({ correctAnswers: [], numAttemptsTaken: 0 });
+export const questionZone = writable<IZone>({ questions: [], correctlyAnsweredQuestions: [] });
 
 export enum State {
 	Intro,

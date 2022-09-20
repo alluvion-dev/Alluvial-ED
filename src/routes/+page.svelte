@@ -3,7 +3,7 @@
 
 	import { cards, questionZone, score, type ICard } from '../stores';
 	import CheckAnswerButton from '../checkAnswerButton.svelte';
-	import TestButton from '../testButton.svelte';
+	// import TestButton from '../testButton.svelte';
 	import { draggable } from '@neodrag/svelte';
 
 	let words = ['red', 'blue', 'green'];
@@ -15,6 +15,7 @@
 			isCorrect: false
 		};
 		$cards.push(card);
+		$questionZone.questions.push({ correctAnswers: [word], numAttemptsTaken: 0 });
 	});
 
 	let settings = {
@@ -79,7 +80,9 @@
 		</form>
 	</div>
 {/if}
-<div id="score">{$score}/{$cards.length}</div>
+<div id="score" style="color: {$score === $cards.length ? 'lightgreen' : 'white'}">
+	{$score}/{$cards.length}
+</div>
 <CheckAnswerButton />
 <!-- <TestButton /> -->
 <div
@@ -87,7 +90,7 @@
 	bind:this={$questionZone.zoneElement}
 	on:mousedown={() => $questionZone.audioElement?.play()}
 >
-	{#each $questionZone.correctAnswers as answer}
+	{#each $questionZone.currentQuestion?.correctAnswers || [] as answer}
 		{#if settings.questionOptions.showImage}
 			<img class="cardImg" src="static/media/img/{answer}.svg" alt={answer} draggable="false" />
 		{/if}
@@ -96,7 +99,6 @@
 		{/if}
 		{#if settings.questionOptions.playAudio}
 			<audio bind:this={$questionZone.audioElement} src="/media/audio/{answer}.mp3">
-				<!-- <source src="/media/audio/{moveable.label}.mp3" type="audio/mp3" /> -->
 				Your browser does not support the audio element.
 			</audio>
 			<img class="audioIndicator" src="/media/img/speaker.png" alt="play audio" />
@@ -141,7 +143,6 @@
 		top: 10px;
 		left: 50%;
 		transform: translate(-50%, 0);
-		color: white;
 		font-size: x-large;
 	}
 
